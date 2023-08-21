@@ -9,7 +9,6 @@ namespace UnitTest.Services
     public class HelloServiceTests
     {
         private IServiceConfiguration serviceConfiguration;
-        private AppDbContext dbContext;
         public IHelloService helloService;
 
         [SetUp]
@@ -20,9 +19,7 @@ namespace UnitTest.Services
             serviceConfiguration = Substitute.For<IServiceConfiguration>();
             serviceConfiguration.GetConfigurationValue(ConfigurationVariables.TEST_VAR).Returns("VALUE");
 
-            dbContext = new TestDatabaseFixture().CreateContext();
-
-            helloService = new HelloService(serviceConfiguration, logger, dbContext);
+            helloService = new HelloService(serviceConfiguration, logger);
         }
 
         [Test]
