@@ -23,7 +23,7 @@ EXPOSE 8080
 ENV ASPNETCORE_URLS=http://*:8080
 
 # non-root
-RUN addgroup --group app --gid 2000 && adduser --uid 1000 --gid 2000 "app" 
+RUN addgroup --group app --gid 11000 && adduser --uid 11001 --gid 11000 "app" 
 RUN chown app:app  /app
 USER app:app 
 
