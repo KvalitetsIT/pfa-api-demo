@@ -17,5 +17,17 @@ RUN dotnet publish "KitNugs.csproj" -c Release -o /app/publish /p:UseAppHost=fal
 
 FROM base AS final
 WORKDIR /app
+# non-root
+RUN addgroup --group app --gid 2000 \
+&& adduser \    
+    --uid 1000 \
+    --gid 2000 \
+    "app" 
+
+RUN chown app:app  /app
+USER app:app 
+#enable read-only filesystem
+ENV COMPlus_EnableDiagnostics=0 
+
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "KitNugs.dll"]
