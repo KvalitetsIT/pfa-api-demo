@@ -8,25 +8,17 @@ namespace KitNugs.Services
     {
         private readonly string _configurationValue;
         private readonly ILogger<HelloService> _logger;
-        private readonly AppDbContext _dbContext;
 
-        public HelloService(IServiceConfiguration configuration, ILogger<HelloService> logger, AppDbContext dbContext)
+        public HelloService(IServiceConfiguration configuration, ILogger<HelloService> logger)
         {
             _configurationValue = configuration.GetConfigurationValue(ConfigurationVariables.TEST_VAR);
             _logger = logger;
-            _dbContext = dbContext;
         }
 
         public async Task<HelloModel> BusinessLogic(string name)
         {
-            await _dbContext.HelloTable.AddAsync(new HelloTable
-            {
-                Created = DateTimeOffset.Now,
-            });
 
             _logger.LogDebug("Doing business logic.");
-
-            _dbContext.SaveChanges();
 
             return new HelloModel()
             {

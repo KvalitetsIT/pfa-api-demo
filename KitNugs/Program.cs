@@ -20,19 +20,6 @@ builder.Services.AddScoped<ISessionIdAccessor, DefaultSessionIdAccessor>();
 
 builder.Services.AddHttpContextAccessor();
 
-// Configure database
-var connectionString = builder.Configuration.GetConnectionString("db");
-
-builder.Services.AddDbContextPool<AppDbContext>(
-    dbContextOptions => dbContextOptions
-        .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
-        // The following three options help with debugging, but should
-        // be changed or removed for production.
-        //.LogTo(Console.WriteLine, LogLevel.Information)
-        //.EnableSensitiveDataLogging()
-        //.EnableDetailedErrors()
-);
-
 // Add controllers
 builder.Services.AddControllers();
 
@@ -43,7 +30,6 @@ builder.Services.AddSwaggerDocument();
 
 // Setup health checks and Prometheus endpoint
 builder.Services.AddHealthChecks()
-                .AddDbContextCheck<AppDbContext>()
                 .ForwardToPrometheus();
 
 var app = builder.Build();
@@ -72,9 +58,6 @@ using (var scope = app.Services.CreateScope())
 {
     // Ensure all env variables is set.
     scope.ServiceProvider.GetRequiredService<IServiceConfiguration>();
-
-    using var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    dbContext.Database.Migrate();
 }
 
 app.Run();
