@@ -17,15 +17,16 @@ RUN dotnet publish "KitNugs.csproj" -c Release -o /app/publish /p:UseAppHost=fal
 
 FROM base AS final
 WORKDIR /app
-# non-root
-RUN addgroup --group app --gid 2000 \
-&& adduser \    
-    --uid 1000 \
-    --gid 2000 \
-    "app" 
 
+# Use port 8080
+EXPOSE 8080
+ENV ASPNETCORE_URLS=http://*:8080
+
+# non-root
+RUN addgroup --group app --gid 2000 && adduser --uid 1000 --gid 2000 "app" 
 RUN chown app:app  /app
 USER app:app 
+
 #enable read-only filesystem
 ENV COMPlus_EnableDiagnostics=0 
 
