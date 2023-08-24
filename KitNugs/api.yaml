@@ -87,6 +87,9 @@ components:
           nullable: true
         from_configuration:
           type: string
+        ip:
+          type: string
+          example: "::ffff:172.22.0.1"
       additionalProperties: false
 
     detailedError:
