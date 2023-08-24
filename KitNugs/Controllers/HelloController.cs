@@ -24,9 +24,7 @@ namespace KitNugs.Controllers
             if (headers.Exists((kvp) => kvp.Key == "X-Forwarded-For"))
             {
                 // when running behind a load balancer you can expect this header
-                var header = headers.First((kvp) => kvp.Key == "X-Forwarded-For").Value.ToString();
-                // in case the IP contains a port, remove ':' and everything after
-                ip = header.Remove(header.IndexOf(':'));
+                ip = headers.First((kvp) => kvp.Key == "X-Forwarded-For").Value.ToString();
             }
             else
             {
